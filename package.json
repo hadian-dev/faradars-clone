@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "db:migrate": "npx prisma migrate dev --name initial --create-only && yarn prisma generate",
+    "db:push": "npx prisma db push"
   },
   "dependencies": {
     "@prisma/client": "^4.13.0",
