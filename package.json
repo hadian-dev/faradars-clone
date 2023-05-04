@@ -12,6 +12,8 @@
   },
   "dependencies": {
     "@prisma/client": "^4.13.0",
+    "@trpc/next": "^10.24.0",
+    "@trpc/server": "^10.24.0",
     "@types/node": "18.15.11",
     "@types/react": "18.0.37",
     "@types/react-dom": "18.0.11",
@@ -22,6 +24,8 @@
     "postcss": "8.4.22",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "redis": "^4.6.6",
+    "superjson": "^1.12.3",
     "tailwindcss": "3.3.1",
     "typescript": "5.0.4"
   },
