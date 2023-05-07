@@ -11,17 +11,19 @@ datasource db {
 }
 
 model Category {
-  id       Int                  @id @default(autoincrement())
-  createAt DateTime             @default(now())
-  updateAt DateTime             @updatedAt
-  deleteAt DateTime?
-  name     String
-  slug     String
-  image    String
-  parentId Int?                 @unique
-  parent   Category?            @relation(name: "parent", fields: [parentId], references: [id])
-  ancestor Category?            @relation(name: "parent")
-  courses  CategoriesOnCourse[]
+  id           Int                  @id @default(autoincrement())
+  createAt     DateTime             @default(now())
+  updateAt     DateTime             @updatedAt
+  deleteAt     DateTime?
+  name         String
+  slug         String               @unique
+  image        String
+  cover        String?
+  descriptions String?
+  parentId     Int?
+  parent       Category?            @relation(name: "parent", fields: [parentId], references: [id])
+  children     Category[]           @relation(name: "parent")
+  courses      CategoriesOnCourse[]
 
   @@map("categories")
 }
