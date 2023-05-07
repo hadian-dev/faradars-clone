@@ -1,15 +1,26 @@
-import { z } from 'zod'
 import { procedure, router } from '../trpc'
 import connectDB from '../utils/connect-db'
+import {
+  createCategorySchema,
+  getCategoryListSchema,
+  getCategorySchema,
+} from '../schemas/category.schema'
+import { categoryController } from '../controllers/category.controller'
 
 connectDB()
 
 export const appRouter = router({
-  getHello: procedure
-    .input(z.object({ text: z.string() }))
-    .query(async ({ input }) => {
-      return { message: `hello world "${input.text}"` }
-    }),
+  createCategory: procedure
+    .input(createCategorySchema)
+    .mutation(({ input }) => categoryController.createCategory({ input })),
+
+  getCategory: procedure
+    .input(getCategorySchema)
+    .query(({ input }) => categoryController.getCategory({ input })),
+
+  getCategoryList: procedure
+    .input(getCategoryListSchema)
+    .query(({ input }) => categoryController.getCategoryList({ input })),
 })
 
 export type TAppRouter = typeof appRouter
