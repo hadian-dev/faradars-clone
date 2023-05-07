@@ -4,3 +4,7 @@ export function splitArray<T>(array: T[], per: number) {
     [] as T[][]
   )
 }
+
+export const getDirection = (local: string) => {
+  return local === 'fa' ? 'rtl' : 'ltr'
+}

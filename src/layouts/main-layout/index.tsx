@@ -8,10 +8,10 @@ type Props = {
 
 export function MainLayout({ children }: Props) {
   return (
-    <div>
+    <>
       <Header />
-      <main>{children}</main>
+      <main className='min-h-[90vh]'>{children}</main>
       <Footer />
-    </div>
+    </>
   )
 }
