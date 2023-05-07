@@ -16,9 +16,7 @@ const Banner = () => {
           </p>
           <div className='flex gap-4 items-center w-full p-2 sm:w-3/4 max-w-xl'>
             <Search />
-            <button className='bg-green-600 py-2 px-4 rounded-md text-white'>
-              جستجو
-            </button>
+            <button className='btn btn-success'>جستجو</button>
           </div>
           <Features />
         </div>

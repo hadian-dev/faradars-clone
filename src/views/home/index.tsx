@@ -1,14 +1,13 @@
-import { trpc } from '@/utils'
+import Link from 'next/link'
 import Banner from './banner'
 import CategoryList from './category-list'
 
 function HomeView() {
-  const hello = trpc.getHello.useQuery({ text: 'here i am' })
-  console.log(hello.data)
   return (
     <div>
       <Banner />
       <CategoryList />
+      <Link href='/admin/category'>ایجاد دسته بندی</Link>
     </div>
   )
 }
