@@ -7,4 +7,8 @@ export const PATHS = {
     url: '/search',
     as: (q = '') => `/search${q}`,
   },
+  product: {
+    url: '/products/[slug]',
+    as: (slug: string, q = '') => `/products/${slug}${q}`,
+  },
 }

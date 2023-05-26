@@ -1,11 +1,13 @@
 import '@/styles/globals.css'
+import 'swiper/css'
+
 import type { AppProps } from 'next/app'
+import { useRouter } from 'next/router'
+import { IntlProvider } from 'react-intl'
 
 import { MainLayout } from '@/layouts'
 import { trpc } from '@/utils/trpc'
-import { IntlProvider } from 'react-intl'
 import { MESSAGES } from '@/constants'
-import { useRouter } from 'next/router'
 
 function App({ Component, pageProps }: AppProps) {
   const router = useRouter()

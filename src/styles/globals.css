@@ -31,6 +31,6 @@ body {
   }
 
   .item {
-    @apply flex flex-col w-auto p-1 items-center rounded-md border border-transparent hover:border-gray-300;
+    @apply flex flex-col w-auto p-2 items-center rounded-md border border-transparent hover:border-gray-300;
   }
 }
