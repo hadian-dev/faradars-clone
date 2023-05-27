@@ -46,7 +46,7 @@ export const categoryController = {
         })
       }
 
-      return category
+      return JSON.parse(JSON.stringify(category))
     } catch (error) {
       throw error
     }
@@ -56,7 +56,7 @@ export const categoryController = {
     try {
       const list = await categoryService.getCategoryList(input)
 
-      return list
+      return JSON.parse(JSON.stringify(list))
     } catch (error) {
       throw error
     }

@@ -1,14 +1,12 @@
 import { PATHS } from '@/constants'
 import { useTranslation } from '@/hooks'
+import { useAppSelector } from '@/redux/store'
 import { Category } from '@prisma/client'
 import Image from 'next/image'
 import Link from 'next/link'
 
-type PropsType = {
-  data: Category[] | undefined
-}
-
-const CategoryList = ({ data }: PropsType) => {
+const CategoryList = () => {
+  const data = useAppSelector((state) => state.categoryReducer.items)
   const { t } = useTranslation()
 
   return (

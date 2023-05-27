@@ -1,3 +1,4 @@
+'use client'
 import { toFormikValidationSchema } from 'zod-formik-adapter'
 import { Field, Form, Formik, FormikHelpers } from 'formik'
 import React, { useCallback } from 'react'

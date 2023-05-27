@@ -4,15 +4,12 @@ import Link from 'next/link'
 import Banner from './banner'
 import CategoryList from './category-list'
 import PopularTutorials from './popular-tutorials'
-import { Category } from '@prisma/client'
-type PropsType = {
-  data: Category[] | undefined
-}
-function HomeView({ data }: PropsType) {
+
+function HomeView() {
   return (
     <div>
       <Banner />
-      <CategoryList data={data} />
+      <CategoryList />
       {/* <CardItem /> */}
 
       {/* <PopularTutorials /> */}
