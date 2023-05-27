@@ -29,25 +29,26 @@ model Category {
 }
 
 model Course {
-  id          Int                  @id @default(autoincrement())
-  createAt    DateTime             @default(now())
-  updateAt    DateTime             @updatedAt
-  deleteAt    DateTime?
-  name        String
-  slug        String
-  enabled     Boolean              @default(true)
-  viewCount   Int                  @default(0)
-  rating      Int                  @default(0)
-  ratingCount Int                  @default(0)
-  duration    String
-  price       Float
-  imageCover  String
-  videoCover  String?
-  size        String?
-  tags        TagsOnCourse[]
-  categories  CategoriesOnCourse[]
-  lessons     Lesson[]
-  users       UsersOnCourse[]
+  id            Int                  @id @default(autoincrement())
+  createAt      DateTime             @default(now())
+  updateAt      DateTime             @updatedAt
+  deleteAt      DateTime?
+  name          String
+  slug          String
+  enabled       Boolean              @default(true)
+  viewCount     Int                  @default(0)
+  rating        Int                  @default(0)
+  ratingCount   Int                  @default(0)
+  favoriteCount Int                  @default(0)
+  duration      String
+  price         Float
+  imageCover    String
+  videoCover    String?
+  size          String?
+  tags          TagsOnCourse[]
+  categories    CategoriesOnCourse[]
+  lessons       Lesson[]
+  users         UsersOnCourse[]
 
   @@map("courses")
 }
