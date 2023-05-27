@@ -5,26 +5,35 @@ import { Field, Form, Formik, FormikHelpers } from 'formik'
 import React, { useCallback } from 'react'
 
 import { createCourseSchema, TCreateCourseInput } from '@/server/schemas'
-import { Button, TextInput } from '@/components/shared'
+import { Button, Textarea, TextInput } from '@/components/shared'
+import trpc from '@/providers/trpc'
 
 const initialValues: TCreateCourseInput = {
   name: '',
   slug: '',
   imageCover: '',
   price: 0,
-  descriptions: '',
-  VideoCover: '',
+  videoCover: '',
   duration: '',
 }
 const CreateCoursePage = () => {
+  const createCourse = trpc.createCourse.useMutation()
+
   const handleSubmit = useCallback(
     async (
       values: TCreateCourseInput,
       helper: FormikHelpers<TCreateCourseInput>
     ) => {
-      console.log(values)
+      const data = await createCourse.mutateAsync(values)
+
+      if (data?.id) {
+        helper.resetForm()
+        console.log('success')
+      } else {
+        console.log(createCourse.error)
+      }
     },
-    []
+    [createCourse]
   )
 
   return (
@@ -54,6 +63,7 @@ const CreateCoursePage = () => {
           />
           <Field
             as={TextInput}
+            type='number'
             className='mb-2'
             name='price'
             label='قیمت دوره'
@@ -64,7 +74,6 @@ const CreateCoursePage = () => {
             name='videoCover'
             label='ویدیو'
           />
-          <Field as={TextInput} name='descriptions' label='توضیحات' />
 
           <div className='mt-8'>
             <Button variant='success'>ایجاد</Button>
