@@ -3,7 +3,7 @@ import { httpBatchLink } from '@trpc/client'
 import { createTRPCNext } from '@trpc/next'
 import SuperJSON from 'superjson'
 
-export const trpc = createTRPCNext<TAppRouter>({
+const trpc = createTRPCNext<TAppRouter>({
   config: ({ ctx }) => ({
     headers: () => (ctx?.req ? { ...ctx.req.headers, 'x-ssr': '1' } : {}),
     links: [

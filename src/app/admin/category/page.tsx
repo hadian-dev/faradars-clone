@@ -1,11 +1,9 @@
-import {
-  TCreateCategoryInput,
-  createCategorySchema,
-} from '@/server/schemas/category.schema'
-import { trpc } from '@/utils'
+import { toFormikValidationSchema } from 'zod-formik-adapter'
 import { Field, Form, Formik, FormikHelpers } from 'formik'
 import React, { useCallback } from 'react'
-import { toFormikValidationSchema } from 'zod-formik-adapter'
+
+import trpc from '@/providers/trpc'
+import { TCreateCategoryInput, createCategorySchema } from '@/server/schemas'
 
 const initialValues: TCreateCategoryInput = {
   name: '',
@@ -16,7 +14,7 @@ const initialValues: TCreateCategoryInput = {
   parentId: 1,
 }
 
-const Category = () => {
+export default function CategoryPage() {
   const create = trpc.createCategory.useMutation()
 
   const handleSubmit = useCallback(
@@ -101,5 +99,3 @@ const Category = () => {
     </div>
   )
 }
-
-export default Category

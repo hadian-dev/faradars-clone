@@ -1,12 +1,14 @@
 import { PATHS } from '@/constants'
 import { useTranslation } from '@/hooks'
-import { trpc } from '@/utils'
 import { Category } from '@prisma/client'
 import Image from 'next/image'
 import Link from 'next/link'
 
-const CategoryList = () => {
-  const { data } = trpc.getCategoryList.useQuery({ take: 24 })
+type PropsType = {
+  data: Category[] | undefined
+}
+
+const CategoryList = ({ data }: PropsType) => {
   const { t } = useTranslation()
 
   return (
