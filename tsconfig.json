@@ -21,9 +21,15 @@
       "@/shared": ["./src/components/shared"],
       "@/organisms": ["./src/components/organisms"],
       "@/constants": ["./src/constants"],
-      "@/utils": ["./src/utils"]
-    }
+      "@/utils": ["./src/utils"],
+      "@/providers/*": ["./src/providers/*"]
+    },
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ]
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
   "exclude": ["node_modules"]
 }
