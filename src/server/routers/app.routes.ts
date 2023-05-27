@@ -1,26 +1,26 @@
 import { procedure, router } from '../trpc'
 import connectDB from '../utils/connect-db'
-import {
-  createCategorySchema,
-  getCategoryListSchema,
-  getCategorySchema,
-} from '../schemas/category.schema'
-import { categoryController } from '../controllers/category.controller'
+import * as schemas from '../schemas'
+import { categoryController, courseController } from '../controllers'
 
 connectDB()
 
 export const appRouter = router({
   createCategory: procedure
-    .input(createCategorySchema)
+    .input(schemas.createCategorySchema)
     .mutation(({ input }) => categoryController.createCategory({ input })),
 
   getCategory: procedure
-    .input(getCategorySchema)
+    .input(schemas.getCategorySchema)
     .query(({ input }) => categoryController.getCategory({ input })),
 
   getCategoryList: procedure
-    .input(getCategoryListSchema)
+    .input(schemas.getCategoryListSchema)
     .query(({ input }) => categoryController.getCategoryList({ input })),
+
+  createCourse: procedure
+    .input(schemas.createCourseSchema)
+    .mutation(({ input }) => courseController.createCourse(input)),
 })
 
 export type TAppRouter = typeof appRouter

@@ -6,8 +6,7 @@ export const createCourseSchema = object({
   imageCover: string({ required_error: 'Image is required' }),
   duration: string({ required_error: 'duration is required' }),
   price: number({ required_error: 'price is required' }),
-  VideoCover: optional(string()),
-  descriptions: optional(string()),
+  videoCover: optional(string()),
 })
 
 export type TCreateCourseInput = TypeOf<typeof createCourseSchema>
