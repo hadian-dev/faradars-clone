@@ -10,29 +10,44 @@ datasource db {
   url      = env("DB_URL")
 }
 
+generator zod {
+  provider = "zod-prisma-types"
+}
+
 model Category {
-  id           Int                  @id @default(autoincrement())
-  createAt     DateTime             @default(now())
-  updateAt     DateTime             @updatedAt
-  deleteAt     DateTime?
-  name         String
-  slug         String               @unique
-  image        String
-  cover        String?
-  descriptions String?
-  parentId     Int?
-  parent       Category?            @relation(name: "parent", fields: [parentId], references: [id])
-  children     Category[]           @relation(name: "parent")
-  courses      CategoriesOnCourse[]
+  id          Int                  @id @default(autoincrement())
+  createdAt   DateTime             @default(now())
+  updatedAt   DateTime             @updatedAt
+  deletedAt   DateTime?
+  name        String
+  slug        String               @unique
+  image       String
+  cover       String?
+  description String?
+  parentId    Int?
+  parent      Category?            @relation(name: "parent", fields: [parentId], references: [id])
+  children    Category[]           @relation(name: "parent")
+  courses     CategoriesOnCourse[]
 
   @@map("categories")
 }
 
+enum Language {
+  EN
+  FA
+}
+
+enum CourseType {
+  ONLINE
+  WEBINAR
+}
+
 model Course {
   id            Int                  @id @default(autoincrement())
-  createAt      DateTime             @default(now())
-  updateAt      DateTime             @updatedAt
-  deleteAt      DateTime?
+  createdAt     DateTime             @default(now())
+  updatedAt     DateTime             @updatedAt
+  deletedAt     DateTime?
+  publishedAt   String?              @default("")
   name          String
   slug          String
   enabled       Boolean              @default(true)
@@ -42,66 +57,102 @@ model Course {
   favoriteCount Int                  @default(0)
   duration      String
   price         Float
+  originalPrice Float
   imageCover    String
-  videoCover    String?
-  size          String?
+  publisher     String?              @default("faradars")
+  videoCover    String?              @default("")
+  size          String?              @default("")
+  language      Language?            @default(FA)
+  type          CourseType?          @default(ONLINE)
+  prerequisites Prerequisite[]
   tags          TagsOnCourse[]
   categories    CategoriesOnCourse[]
   lessons       Lesson[]
   users         UsersOnCourse[]
+  demos         Demo[]
+  features      CourseFeature[]
+  comments      Comment[]
+  descriptions  CourseDescription[]
 
   @@map("courses")
 }
 
+model CourseDescription {
+  id       Int     @id @default(autoincrement())
+  label    String
+  content  String
+  course   Course? @relation(fields: [courseId], references: [id])
+  courseId Int?
+  position Int
+
+  @@map("course_descriptions")
+}
+
 model Lesson {
-  id           Int       @id @default(autoincrement())
-  createAt     DateTime  @default(now())
-  updateAt     DateTime  @updatedAt
-  deleteAt     DateTime?
-  name         String
-  descriptions String
-  duration     String?
-  video        String?
-  images       String[]
-  notes        String[]
-  practices    String[]
-  rating       Int       @default(0)
-  ratingCount  Int       @default(0)
-  course       Course?   @relation(fields: [courseId], references: [id])
-  courseId     Int?
+  id          Int       @id @default(autoincrement())
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  deletedAt   DateTime?
+  name        String
+  description String
+  duration    String?
+  video       String?
+  images      String[]
+  notes       String[]
+  practices   String[]
+  rating      Int       @default(0)
+  ratingCount Int       @default(0)
+  course      Course?   @relation(fields: [courseId], references: [id])
+  courseId    Int?
 
   @@map("lessons")
 }
 
 model Tag {
-  id       Int            @id @default(autoincrement())
-  createAt DateTime       @default(now())
-  updateAt DateTime       @updatedAt
-  deleteAt DateTime?
-  name     String
-  slug     String
-  courses  TagsOnCourse[]
+  id        Int            @id @default(autoincrement())
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+  deletedAt DateTime?
+  name      String
+  slug      String
+  courses   TagsOnCourse[]
 
   @@map("tags")
 }
 
-model User {
-  id        Int             @id @default(autoincrement())
-  createAt  DateTime        @default(now())
-  updateAt  DateTime        @updatedAt
-  deleteAt  DateTime?
-  name      String?
-  image     String?
-  email     String?         @unique
-  phone     String?         @unique
-  slug      String?
-  biography String?
-  grade     String?
-  degree    String?
-  gender    GenderType
-  courses   UsersOnCourse[]
+model Demo {
+  id       Int    @id @default(autoincrement())
+  name     String
+  link     String
+  position Int?   @default(0)
+  course   Course @relation(fields: [courseId], references: [id])
+  courseId Int
 
-  @@map("users")
+  @@map("demos")
+}
+
+model Prerequisite {
+  id       Int     @id @default(autoincrement())
+  name     String
+  link     String? @default("")
+  type     String
+  position Int?    @default(0)
+  course   Course  @relation(fields: [courseId], references: [id])
+  courseId Int
+
+  @@map("prerequisites")
+}
+
+model CourseFeature {
+  id       Int     @id @default(autoincrement())
+  name     String
+  value    String? @default("")
+  image    String? @default("")
+  position Int?    @default(0)
+  course   Course  @relation(fields: [courseId], references: [id])
+  courseId Int
+
+  @@map("course_features")
 }
 
 enum GenderType {
@@ -110,11 +161,45 @@ enum GenderType {
   Unknown
 }
 
+model User {
+  id        Int             @id @default(autoincrement())
+  createdAt DateTime        @default(now())
+  updatedAt DateTime        @updatedAt
+  deletedAt DateTime?
+  name      String?
+  image     String?
+  email     String?         @unique
+  phone     String?         @unique
+  slug      String?
+  biography String?
+  grade     String?
+  degree    String?
+  wishlist  Int[]           @default([])
+  gender    GenderType
+  courses   UsersOnCourse[]
+  comments  Comment[]
+
+  @@map("users")
+}
+
+model Comment {
+  id        Int       @id @default(autoincrement())
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+  text      String
+  user      User      @relation(fields: [userId], references: [id])
+  userId    Int
+  course    Course    @relation(fields: [courseId], references: [id])
+  courseId  Int
+}
+
 model CategoriesOnCourse {
   course     Course   @relation(fields: [courseId], references: [id])
   courseId   Int
   category   Category @relation(fields: [categoryId], references: [id])
   categoryId Int
+  assignedAt DateTime @default(now())
 
   @@id([courseId, categoryId])
   @@map("categories_on_course")

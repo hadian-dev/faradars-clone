@@ -1,15 +1,23 @@
 -- CreateEnum
+CREATE TYPE "Language" AS ENUM ('EN', 'FA');
+
+-- CreateEnum
+CREATE TYPE "CourseType" AS ENUM ('ONLINE', 'WEBINAR');
+
+-- CreateEnum
 CREATE TYPE "GenderType" AS ENUM ('Man', 'Woman', 'Unknown');
 
 -- CreateTable
 CREATE TABLE "categories" (
     "id" SERIAL NOT NULL,
-    "createAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updateAt" TIMESTAMP(3) NOT NULL,
-    "deleteAt" TIMESTAMP(3),
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+    "deletedAt" TIMESTAMP(3),
     "name" TEXT NOT NULL,
     "slug" TEXT NOT NULL,
     "image" TEXT NOT NULL,
+    "cover" TEXT,
+    "description" TEXT,
     "parentId" INTEGER,
 
     CONSTRAINT "categories_pkey" PRIMARY KEY ("id")
@@ -18,20 +26,31 @@ CREATE TABLE "categories" (
 -- CreateTable
 CREATE TABLE "courses" (
     "id" SERIAL NOT NULL,
-    "createAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updateAt" TIMESTAMP(3) NOT NULL,
-    "deleteAt" TIMESTAMP(3),
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+    "deletedAt" TIMESTAMP(3),
+    "publishedAt" TEXT DEFAULT '',
     "name" TEXT NOT NULL,
     "slug" TEXT NOT NULL,
+    "introduction" TEXT DEFAULT '',
+    "description" TEXT DEFAULT '',
+    "htmlDescription" TEXT DEFAULT '',
+    "tableOfContents" TEXT DEFAULT '',
+    "suitableFor" TEXT DEFAULT '',
     "enabled" BOOLEAN NOT NULL DEFAULT true,
     "viewCount" INTEGER NOT NULL DEFAULT 0,
     "rating" INTEGER NOT NULL DEFAULT 0,
     "ratingCount" INTEGER NOT NULL DEFAULT 0,
+    "favoriteCount" INTEGER NOT NULL DEFAULT 0,
     "duration" TEXT NOT NULL,
     "price" DOUBLE PRECISION NOT NULL,
+    "originalPrice" DOUBLE PRECISION NOT NULL,
     "imageCover" TEXT NOT NULL,
-    "videoCover" TEXT,
-    "size" TEXT,
+    "publisher" TEXT DEFAULT 'faradars',
+    "videoCover" TEXT DEFAULT '',
+    "size" TEXT DEFAULT '',
+    "language" "Language" DEFAULT 'FA',
+    "type" "CourseType" DEFAULT 'ONLINE',
 
     CONSTRAINT "courses_pkey" PRIMARY KEY ("id")
 );
@@ -39,11 +58,11 @@ CREATE TABLE "courses" (
 -- CreateTable
 CREATE TABLE "lessons" (
     "id" SERIAL NOT NULL,
-    "createAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updateAt" TIMESTAMP(3) NOT NULL,
-    "deleteAt" TIMESTAMP(3),
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+    "deletedAt" TIMESTAMP(3),
     "name" TEXT NOT NULL,
-    "descriptions" TEXT NOT NULL,
+    "description" TEXT NOT NULL,
     "duration" TEXT,
     "video" TEXT,
     "images" TEXT[],
@@ -59,9 +78,9 @@ CREATE TABLE "lessons" (
 -- CreateTable
 CREATE TABLE "tags" (
     "id" SERIAL NOT NULL,
-    "createAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updateAt" TIMESTAMP(3) NOT NULL,
-    "deleteAt" TIMESTAMP(3),
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+    "deletedAt" TIMESTAMP(3),
     "name" TEXT NOT NULL,
     "slug" TEXT NOT NULL,
 
@@ -69,11 +88,46 @@ CREATE TABLE "tags" (
 );
 
 -- CreateTable
+CREATE TABLE "demos" (
+    "id" SERIAL NOT NULL,
+    "name" TEXT NOT NULL,
+    "link" TEXT NOT NULL,
+    "position" INTEGER DEFAULT 0,
+    "courseId" INTEGER NOT NULL,
+
+    CONSTRAINT "demos_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "prerequisites" (
+    "id" SERIAL NOT NULL,
+    "name" TEXT NOT NULL,
+    "link" TEXT DEFAULT '',
+    "type" TEXT NOT NULL,
+    "position" INTEGER DEFAULT 0,
+    "courseId" INTEGER NOT NULL,
+
+    CONSTRAINT "prerequisites_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "course_features" (
+    "id" SERIAL NOT NULL,
+    "name" TEXT NOT NULL,
+    "value" TEXT DEFAULT '',
+    "image" TEXT DEFAULT '',
+    "position" INTEGER DEFAULT 0,
+    "courseId" INTEGER NOT NULL,
+
+    CONSTRAINT "course_features_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "users" (
     "id" SERIAL NOT NULL,
-    "createAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updateAt" TIMESTAMP(3) NOT NULL,
-    "deleteAt" TIMESTAMP(3),
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+    "deletedAt" TIMESTAMP(3),
     "name" TEXT,
     "image" TEXT,
     "email" TEXT,
@@ -82,15 +136,30 @@ CREATE TABLE "users" (
     "biography" TEXT,
     "grade" TEXT,
     "degree" TEXT,
+    "wishlist" INTEGER[] DEFAULT ARRAY[]::INTEGER[],
     "gender" "GenderType" NOT NULL,
 
     CONSTRAINT "users_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
+CREATE TABLE "Comment" (
+    "id" SERIAL NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+    "deletedAt" TIMESTAMP(3),
+    "text" TEXT NOT NULL,
+    "userId" INTEGER NOT NULL,
+    "courseId" INTEGER NOT NULL,
+
+    CONSTRAINT "Comment_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "categories_on_course" (
     "courseId" INTEGER NOT NULL,
     "categoryId" INTEGER NOT NULL,
+    "assignedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "categories_on_course_pkey" PRIMARY KEY ("courseId","categoryId")
 );
@@ -113,7 +182,7 @@ CREATE TABLE "tags_on_course" (
 );
 
 -- CreateIndex
-CREATE UNIQUE INDEX "categories_parentId_key" ON "categories"("parentId");
+CREATE UNIQUE INDEX "categories_slug_key" ON "categories"("slug");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "users_email_key" ON "users"("email");
@@ -126,6 +195,21 @@ ALTER TABLE "categories" ADD CONSTRAINT "categories_parentId_fkey" FOREIGN KEY (
 
 -- AddForeignKey
 ALTER TABLE "lessons" ADD CONSTRAINT "lessons_courseId_fkey" FOREIGN KEY ("courseId") REFERENCES "courses"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "demos" ADD CONSTRAINT "demos_courseId_fkey" FOREIGN KEY ("courseId") REFERENCES "courses"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "prerequisites" ADD CONSTRAINT "prerequisites_courseId_fkey" FOREIGN KEY ("courseId") REFERENCES "courses"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "course_features" ADD CONSTRAINT "course_features_courseId_fkey" FOREIGN KEY ("courseId") REFERENCES "courses"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Comment" ADD CONSTRAINT "Comment_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Comment" ADD CONSTRAINT "Comment_courseId_fkey" FOREIGN KEY ("courseId") REFERENCES "courses"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "categories_on_course" ADD CONSTRAINT "categories_on_course_courseId_fkey" FOREIGN KEY ("courseId") REFERENCES "courses"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
