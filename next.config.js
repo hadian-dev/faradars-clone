@@ -5,6 +5,9 @@ const nextConfig = {
     locales: ['fa'],
     defaultLocale: 'fa',
   },
+  images: {
+    domains: ['faradars.org'],
+  },
 }
 
 module.exports = nextConfig

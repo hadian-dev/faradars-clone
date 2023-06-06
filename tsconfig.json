@@ -22,7 +22,8 @@
       "@/organisms": ["./src/components/organisms"],
       "@/constants": ["./src/constants"],
       "@/utils": ["./src/utils"],
-      "@/providers/*": ["./src/providers/*"]
+      "@/providers/*": ["./src/providers/*"],
+      "@/generated": ["./prisma/generated/zod"]
     },
     "plugins": [
       {
