@@ -12,7 +12,7 @@ function HomeView() {
       <CategoryList />
       {/* <CardItem /> */}
 
-      {/* <PopularTutorials /> */}
+      <PopularTutorials />
       <div className='flex flex-col gap-1'>
         <Link href='/admin/category'>ایجاد دسته بندی</Link>
         <Link href='/admin/courses'>ایجاد آموزش</Link>

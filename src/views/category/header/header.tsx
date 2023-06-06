@@ -1,12 +1,14 @@
-import { trpc } from '@/utils'
+import { trpc } from '@/providers/trpc'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
 import React from 'react'
 
 const Header = () => {
   const { query } = useRouter()
-  const { data } = trpc.getCategory.useQuery({ slug: String(query.slug) })
+  const [id] = String(query.slug).split('-')
+  const { data } = trpc.getCategory.useQuery({ where: { id: +id } })
 
+  console.log(query.slug)
   if (!data) return null
 
   return (
@@ -19,7 +21,7 @@ const Header = () => {
           <h1 className='text-3xl'>{data.name}</h1>
         </header>
       </div>
-      {data.descriptions && <p>{data.descriptions}</p>}
+      {data.description && <p>{data.description}</p>}
     </div>
   )
 }

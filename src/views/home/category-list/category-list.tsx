@@ -6,7 +6,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 
 const CategoryList = () => {
-  const data = useAppSelector((state) => state.categoryReducer.items)
+  const data = useAppSelector((state) => state.category.items)
   const { t } = useTranslation()
 
   return (
@@ -25,7 +25,7 @@ const CategoryList = () => {
           </div>
         )}
 
-        <Link href={PATHS.search.url} className='btn btn-info'>
+        <Link href={PATHS.courses.url} className='btn btn-info'>
           {t('allTutorials')}
         </Link>
       </div>
