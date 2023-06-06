@@ -3,16 +3,17 @@ import { toFormikValidationSchema } from 'zod-formik-adapter'
 import { Field, Form, Formik, FormikHelpers } from 'formik'
 import React, { useCallback } from 'react'
 
-import trpc from '@/providers/trpc'
-import { TCreateCategoryInput, createCategorySchema } from '@/server/schemas'
+import { trpc } from '@/providers/trpc'
+import { Prisma } from '@prisma/client'
+import { CategoryCreateInputSchema } from '@/generated'
 
-const initialValues: TCreateCategoryInput = {
+const initialValues: Prisma.CategoryCreateInput = {
   name: '',
   slug: '',
   image: '',
   cover: '',
-  descriptions: '',
-  parentId: 1,
+  description: '',
+  // parentId: 1,
 }
 
 export default function CategoryPage() {
@@ -20,8 +21,8 @@ export default function CategoryPage() {
 
   const handleSubmit = useCallback(
     async (
-      values: TCreateCategoryInput,
-      helper: FormikHelpers<TCreateCategoryInput>
+      values: Prisma.CategoryCreateInput,
+      helper: FormikHelpers<Prisma.CategoryCreateInput>
     ) => {
       create.mutate(values)
 
@@ -38,7 +39,7 @@ export default function CategoryPage() {
       <Formik
         initialValues={initialValues}
         onSubmit={handleSubmit}
-        validationSchema={toFormikValidationSchema(createCategorySchema)}
+        validationSchema={toFormikValidationSchema(CategoryCreateInputSchema)}
       >
         <Form className='w-2/4'>
           <label className='block'>
