@@ -17,6 +17,19 @@
     --foreground-rgb: 255, 255, 255;
     --background-rgb: 40, 45, 55;
   }
+
+  .quill .ql-toolbar {
+    border-bottom: 1px solid #445 !important;
+  }
+
+  .quill .ql-container {
+    color: #445;
+    font-family: 'Shabnam';
+  }
+
+  .quill .ql-tooltip input {
+    background-color: #ebebeb;
+  }
 }
 
 body {
@@ -25,9 +38,35 @@ body {
   background: rgb(var(--background-rgb));
 }
 
+.h-unset {
+  height: unset;
+}
+
+.quill {
+  direction: ltr;
+}
+
+svg {
+  margin: auto;
+}
+
 @layer base {
   body {
     @apply font-shabnam;
+  }
+
+  input[type='number']::-webkit-inner-spin-button,
+  input[type='number']::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  .rtl_direction {
+    direction: rtl;
+  }
+
+  .ltr_direction {
+    direction: ltr;
   }
 
   .item {

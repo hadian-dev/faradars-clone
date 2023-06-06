@@ -1,17 +1,20 @@
+'use client'
+
 import React, { ReactNode } from 'react'
-import Header from './header'
-import Footer from './footer'
+import { useMediaQuery } from '@/hooks'
+import ClientLayout from './client'
+import MobileLayout from './mobile'
 
 type Props = {
   children: ReactNode
 }
 
 export function MainLayout({ children }: Props) {
-  return (
-    <>
-      <Header />
-      <main className='min-h-[90vh]'>{children}</main>
-      <Footer />
-    </>
+  const isMobile = useMediaQuery('(max-width:768px)')
+
+  return isMobile ? (
+    <MobileLayout>{children}</MobileLayout>
+  ) : (
+    <ClientLayout>{children}</ClientLayout>
   )
 }
