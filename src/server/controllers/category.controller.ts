@@ -1,64 +1,36 @@
-import { TRPCError } from '@trpc/server'
-import {
-  TCreateCategoryInput,
-  TGetCategoryInput,
-  TGetCategoryListInput,
-} from '../schemas/category.schema'
-import { categoryService } from '../services/category.service'
+// import { TRPCError } from '@trpc/server'
+import { Category, Prisma } from '@prisma/client'
+import { prisma } from '../utils/connect-db'
 
 export const categoryController = {
-  createCategory: async ({ input }: { input: TCreateCategoryInput }) => {
-    try {
-      const category = await categoryService.createCategory(input)
+  createCategory: async (input: Prisma.CategoryCreateInput) => {
+    // try {
+    // const category = await
+    return prisma.category.create({ data: input })
 
-      return category
-    } catch (error: any) {
-      console.log(error)
-      if (error.code === 'P2002') {
-        throw new TRPCError({
-          code: 'CONFLICT',
-          message: error.message,
-        })
-      }
+    // return category
+    // } catch (error: any) {
+    //   console.log(error)
+    //   if (error.code === 'P2002') {
+    //     throw new TRPCError({
+    //       code: 'CONFLICT',
+    //       message: error.message,
+    //     })
+    //   }
 
-      throw error
-    }
+    //   throw error
+    // }
   },
 
-  getCategory: async ({ input }: { input: TGetCategoryInput }) => {
-    try {
-      if (!input.id && !input.slug) {
-        throw new TRPCError({
-          code: 'BAD_REQUEST',
-          message: 'Invalid Input, id or slug is required',
-        })
-      }
+  getCategory: async (input: Prisma.CategoryFindUniqueArgs) => {
+    const category = await prisma.category.findUnique(input)
 
-      const category = await categoryService.getCategory({
-        slug: input.slug,
-        id: input.id,
-      })
-
-      if (!category) {
-        throw new TRPCError({
-          code: 'BAD_REQUEST',
-          message: 'Invalid Input, Category not found',
-        })
-      }
-
-      return JSON.parse(JSON.stringify(category))
-    } catch (error) {
-      throw error
-    }
+    return category ? (JSON.parse(JSON.stringify(category)) as Category) : null
   },
 
-  getCategoryList: async ({ input }: { input: TGetCategoryListInput }) => {
-    try {
-      const list = await categoryService.getCategoryList(input)
+  getCategoryList: async (input: Prisma.CategoryFindManyArgs) => {
+    const list = await prisma.category.findMany(input)
 
-      return JSON.parse(JSON.stringify(list))
-    } catch (error) {
-      throw error
-    }
+    return JSON.parse(JSON.stringify(list)) as Category[]
   },
 }
