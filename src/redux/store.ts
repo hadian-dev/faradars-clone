@@ -1,10 +1,13 @@
-import { configureStore } from '@reduxjs/toolkit'
-import categoryReducer from './slices/categorySlice'
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux'
+import { configureStore } from '@reduxjs/toolkit'
+
+import categoryReducer from './slices/categorySlice'
+import courseReducer from './slices/courseSlice'
 
 export const store = configureStore({
   reducer: {
-    categoryReducer,
+    category: categoryReducer,
+    course: courseReducer,
   },
   devTools: process.env.NODE_ENV !== 'production',
 })
