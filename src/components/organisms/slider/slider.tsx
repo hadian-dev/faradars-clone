@@ -6,7 +6,7 @@ export const Slider = () => {
     <Swiper spaceBetween={16} slidesPerView='auto'>
       {Array.from({ length: 10 }, (v, i) => i).map((v) => (
         <SwiperSlide key={v} style={{ width: 'auto' }}>
-          <CardItem />
+          {/* <CardItem /> */}
         </SwiperSlide>
       ))}
     </Swiper>
