@@ -6,7 +6,7 @@ import { getFetch, httpBatchLink, loggerLink } from '@trpc/client'
 import { useState } from 'react'
 import SuperJSON from 'superjson'
 
-import trpc from '.'
+import { trpc } from './trpc'
 
 export const TrpcProvider = ({ children }: React.PropsWithChildren) => {
   const [queryClient] = useState(
