@@ -1,15 +1,11 @@
 'use client'
 
-import React, { ReactNode } from 'react'
+import React from 'react'
 import { useMediaQuery } from '@/hooks'
 import ClientLayout from './client'
 import MobileLayout from './mobile'
 
-type Props = {
-  children: ReactNode
-}
-
-export function MainLayout({ children }: Props) {
+const HomeLayout = ({ children }: React.PropsWithChildren) => {
   const isMobile = useMediaQuery('(max-width:768px)')
 
   return isMobile ? (
@@ -18,3 +14,5 @@ export function MainLayout({ children }: Props) {
     <ClientLayout>{children}</ClientLayout>
   )
 }
+
+export default HomeLayout
