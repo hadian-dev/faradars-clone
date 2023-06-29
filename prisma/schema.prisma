@@ -15,19 +15,21 @@ generator zod {
 }
 
 model Category {
-  id          Int                  @id @default(autoincrement())
-  createdAt   DateTime             @default(now())
-  updatedAt   DateTime             @updatedAt
+  id          Int        @id @default(autoincrement())
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
   deletedAt   DateTime?
   name        String
-  slug        String               @unique
+  slug        String     @unique
   image       String
   cover       String?
   description String?
+  isActive    Boolean    @default(true)
+  parent      Category?  @relation(name: "parent", fields: [parentId], references: [id])
   parentId    Int?
-  parent      Category?            @relation(name: "parent", fields: [parentId], references: [id])
-  children    Category[]           @relation(name: "parent")
-  courses     CategoriesOnCourse[]
+  children    Category[] @relation(name: "parent")
+
+  courses CategoriesOnCourse[]
 
   @@map("categories")
 }
@@ -42,48 +44,58 @@ enum CourseType {
   WEBINAR
 }
 
+enum CourseState {
+  STARTED
+  DRAFT
+  PROGRESS
+  PUBLISHED
+  FINISHED
+}
+
 model Course {
-  id            Int                  @id @default(autoincrement())
-  createdAt     DateTime             @default(now())
-  updatedAt     DateTime             @updatedAt
-  deletedAt     DateTime?
-  publishedAt   String?              @default("")
-  name          String
-  slug          String
-  enabled       Boolean              @default(true)
-  viewCount     Int                  @default(0)
-  rating        Int                  @default(0)
-  ratingCount   Int                  @default(0)
-  favoriteCount Int                  @default(0)
-  duration      String
-  price         Float
-  originalPrice Float
-  imageCover    String
-  publisher     String?              @default("faradars")
-  videoCover    String?              @default("")
-  size          String?              @default("")
-  language      Language?            @default(FA)
-  type          CourseType?          @default(ONLINE)
-  prerequisites Prerequisite[]
-  tags          TagsOnCourse[]
-  categories    CategoriesOnCourse[]
-  lessons       Lesson[]
-  users         UsersOnCourse[]
-  demos         Demo[]
-  features      CourseFeature[]
-  comments      Comment[]
-  descriptions  CourseDescription[]
+  id               Int                   @id @default(autoincrement())
+  createdAt        DateTime              @default(now())
+  updatedAt        DateTime              @updatedAt
+  deletedAt        DateTime?
+  publishedAt      String                @default("")
+  name             String
+  slug             String
+  enabled          Boolean               @default(false)
+  viewCount        Int                   @default(0)
+  rating           Int                   @default(0)
+  ratingCount      Int                   @default(0)
+  favoriteCount    Int                   @default(0)
+  duration         String
+  price            Float
+  originalPrice    Float
+  image            String                @default("")
+  publisher        String                @default("faradars")
+  videoCover       String                @default("")
+  size             String                @default("")
+  status           CourseState           @default(STARTED)
+  language         Language              @default(FA)
+  type             CourseType            @default(ONLINE)
+  instructors      InstructorsOnCourse[]
+  prerequisites    Prerequisite[]
+  tags             TagsOnCourse[]
+  lessons          Lesson[]
+  users            UsersOnCourse[]
+  demos            Demo[]
+  features         CourseFeature[]
+  reviews          Review[]
+  categories       CategoriesOnCourse[]
+  htmlDescriptions CourseDescription[]
 
   @@map("courses")
 }
 
 model CourseDescription {
-  id       Int     @id @default(autoincrement())
-  label    String
+  id       Int    @id @default(autoincrement())
   content  String
+  position Int
+
   course   Course? @relation(fields: [courseId], references: [id])
   courseId Int?
-  position Int
 
   @@map("course_descriptions")
 }
@@ -155,6 +167,51 @@ model CourseFeature {
   @@map("course_features")
 }
 
+model VerificationToken {
+  id         Int      @id @default(autoincrement())
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+  @@map("verification_tokens")
+}
+
+model Account {
+  id                Int       @id @default(autoincrement())
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+  deletedAt         DateTime?
+  providerType      String
+  providerId        String
+  providerAccountId String
+  refreshToken      String?
+  accessToken       String?
+  accessTokenExpire DateTime?
+  sessionState      String?
+  user              User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId            Int
+
+  @@unique([providerId, providerAccountId])
+  @@map("acounts")
+}
+
+model Session {
+  id           Int       @id @default(autoincrement())
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  deletedAt    DateTime?
+  expire       DateTime
+  sessionToken String    @unique
+  accessToken  String    @unique
+  user         User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId       Int
+
+  @@map("sessions")
+}
+
 enum GenderType {
   Man
   Woman
@@ -162,65 +219,144 @@ enum GenderType {
 }
 
 model User {
-  id        Int             @id @default(autoincrement())
-  createdAt DateTime        @default(now())
-  updatedAt DateTime        @updatedAt
-  deletedAt DateTime?
-  name      String?
-  image     String?
-  email     String?         @unique
-  phone     String?         @unique
-  slug      String?
-  biography String?
-  grade     String?
-  degree    String?
-  wishlist  Int[]           @default([])
-  gender    GenderType
-  courses   UsersOnCourse[]
-  comments  Comment[]
+  id            Int               @id @default(autoincrement())
+  createdAt     DateTime          @default(now())
+  updatedAt     DateTime          @updatedAt
+  deletedAt     DateTime?
+  name          String?
+  image         String?
+  email         String?           @unique
+  phone         String?           @unique
+  slug          String?
+  biography     String?
+  emailVerified DateTime?
+  phoneVerified DateTime?
+  wishlist      Int[]             @default([])
+  gender        GenderType        @default(Unknown)
+  courses       UsersOnCourse[]
+  reviews       Review[]
+  instrucor     Instructor?
+  mySocialMedia UserSocialMedia[]
+  accounts      Account[]
+  sessions      Session[]
 
   @@map("users")
 }
 
-model Comment {
-  id        Int       @id @default(autoincrement())
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+model Instructor {
+  id          Int      @id @default(autoincrement())
+  assignedAt  DateTime @default(now())
+  grade       String   @default("")
+  degree      String   @default("")
+  htmlContent String   @default("")
+  field       String   @default("")
+  coverImage  String   @default("")
+  rating      Int      @default(0)
+  ratingCount Int      @default(0)
+  user        User     @relation(fields: [userId], references: [id])
+  userId      Int      @unique
+
+  myCourses             InstructorsOnCourse[]
+  educationalBackground InstructorEducationalBackground[]
+
+  @@map("instructors")
+}
+
+model InstructorEducationalBackground {
+  id           Int         @id @default(autoincrement())
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+  deletedAt    DateTime?
+  degree       String
+  grade        String
+  university   String
+  startDate    String
+  endDate      String
+  instructor   Instructor? @relation(fields: [instructorId], references: [id])
+  instructorId Int?
+
+  @@map("instructor_educational_backgrounds")
+}
+
+enum SocialLinkType {
+  WEBSITE
+  LINKEDIN
+  TWITTER
+  YOUTUBE
+  INSTAGRAM
+  FACEBOOK
+  GITHUB
+}
+
+model UserSocialMedia {
+  id        Int            @id @default(autoincrement())
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
   deletedAt DateTime?
-  text      String
-  user      User      @relation(fields: [userId], references: [id])
-  userId    Int
-  course    Course    @relation(fields: [courseId], references: [id])
-  courseId  Int
+  name      String
+  link      String
+  type      SocialLinkType
+  user      User?          @relation(fields: [userId], references: [id])
+  userId    Int?
+
+  @@map("user_social_media")
+}
+
+model Review {
+  id          Int       @id @default(autoincrement())
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  deletedAt   DateTime?
+  text        String
+  rating      Int       @default(0)
+  ratingCount Int       @default(0)
+  user        User      @relation(fields: [userId], references: [id])
+  userId      Int
+  course      Course    @relation(fields: [courseId], references: [id])
+  courseId    Int
+
+  @@map("reviews")
+}
+
+model InstructorsOnCourse {
+  assignedAt   DateTime   @default(now())
+  course       Course     @relation(fields: [courseId], references: [id])
+  courseId     Int
+  instructor   Instructor @relation(fields: [instructorId], references: [id])
+  instructorId Int
+
+  @@id([courseId, instructorId])
+  @@map("instructors_on_course")
 }
 
 model CategoriesOnCourse {
+  assignedAt DateTime @default(now())
   course     Course   @relation(fields: [courseId], references: [id])
   courseId   Int
   category   Category @relation(fields: [categoryId], references: [id])
   categoryId Int
-  assignedAt DateTime @default(now())
 
   @@id([courseId, categoryId])
   @@map("categories_on_course")
 }
 
 model UsersOnCourse {
-  course   Course @relation(fields: [courseId], references: [id])
-  courseId Int
-  user     User   @relation(fields: [userId], references: [id])
-  userId   Int
+  assignedAt DateTime @default(now())
+  course     Course   @relation(fields: [courseId], references: [id])
+  courseId   Int
+  user       User     @relation(fields: [userId], references: [id])
+  userId     Int
 
   @@id([courseId, userId])
   @@map("users_on_course")
 }
 
 model TagsOnCourse {
+  assignedAt DateTime @default(now())
   course     Course   @relation(fields: [courseId], references: [id])
   courseId   Int
   tag        Tag      @relation(fields: [tagId], references: [id])
   tagId      Int
-  assignedAt DateTime @default(now())
 
   @@id([courseId, tagId])
   @@map("tags_on_course")
