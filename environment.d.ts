@@ -5,6 +5,7 @@ declare global {
 
   namespace NodeJS {
     interface ProcessEnv {
+      // Database
       DB_URL: string
       DB_HOST: string
       DB_PORT: number
@@ -12,7 +13,11 @@ declare global {
       DB_USERNAME: string
       DB_PASSWORD: string
 
-      REDIS_URL: string
+      // Authentication
+      EMAIL_SERVER: string
+      EMAIL_FROM: string
+      AUTH_SECRET: string
+      JWT_SECRET: string
 
       NEXT_PUBLIC_BASE_URL: string
     }

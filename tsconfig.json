@@ -17,12 +17,14 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"],
+      "@/server/*": ["./src/server/*"],
       "@/layouts/*": ["./src/layouts/*"],
       "@/shared": ["./src/components/shared"],
       "@/organisms": ["./src/components/organisms"],
       "@/constants": ["./src/constants"],
       "@/utils": ["./src/utils"],
       "@/providers/*": ["./src/providers/*"],
+      "@/svgs/*": ["./src/assets/svgs/*"],
       "@/generated": ["./prisma/generated/zod"]
     },
     "plugins": [
