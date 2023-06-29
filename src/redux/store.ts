@@ -3,11 +3,13 @@ import { configureStore } from '@reduxjs/toolkit'
 
 import categoryReducer from './slices/categorySlice'
 import courseReducer from './slices/courseSlice'
+import accountReducer from './slices/account-slice'
 
 export const store = configureStore({
   reducer: {
     category: categoryReducer,
     course: courseReducer,
+    account: accountReducer,
   },
   devTools: process.env.NODE_ENV !== 'production',
 })
