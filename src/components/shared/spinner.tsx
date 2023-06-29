@@ -1,9 +1,14 @@
 import React from 'react'
 
-export const Spinner = ({ loading }: { loading: boolean }) => {
+type Props = {
+  loading?: boolean
+  className?: string
+}
+
+export const Spinner = ({ loading = true, className = '' }: Props) => {
   return loading ? (
     <svg
-      className='animate-spin -ml-1 mr-3 h-8 w-8'
+      className={`animate-spin m-0 h-8 w-8 ${className}`}
       xmlns='http://www.w3.org/2000/svg'
       fill='none'
       height='100px'

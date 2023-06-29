@@ -1,3 +1,5 @@
+'use client'
+
 import React, { useRef, useState } from 'react'
 import { IoIosArrowUp } from 'react-icons/io'
 
@@ -27,7 +29,7 @@ export const Collapse = ({
 
   return (
     <div
-      className={`border border-zinc-300 dark:border-zinc-700 w-full h-fit transition-all ${wrapperClassName}`}
+      className={`border rounded-lg border-zinc-300 dark:border-zinc-700 w-full h-fit transition-all ${wrapperClassName}`}
     >
       <button
         title={label}

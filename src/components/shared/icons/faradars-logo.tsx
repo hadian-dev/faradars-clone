@@ -1,11 +1,16 @@
 import React from 'react'
 
-export function FaradarsLogoIcon() {
+type Props = {
+  width?: number
+  height?: number
+}
+
+export function FaradarsLogoIcon({ width = 50, height = 24 }: Props) {
   return (
     <svg
       xmlns='http://www.w3.org/2000/svg'
-      width='50'
-      height='24'
+      width={width}
+      height={height}
       viewBox='0 0 50 24'
       fill='none'
     >

@@ -1,3 +1,5 @@
+'use client'
+
 import { useSearchParams } from 'next/navigation'
 import React, { useEffect, useRef, useState } from 'react'
 import { FiArrowRight, FiArrowLeft } from 'react-icons/fi'

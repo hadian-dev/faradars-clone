@@ -3,21 +3,33 @@ import React from 'react'
 type Props = {
   label?: string
   wrapperClassName?: string
+  errorMessage?: string
   className?: string
 } & React.TextareaHTMLAttributes<HTMLTextAreaElement>
 
 export function Textarea({
   label,
+  errorMessage,
   wrapperClassName = '',
   className = '',
   ...props
 }: Props) {
   return (
     <label className={`block ${wrapperClassName}`}>
-      {label && <span>{label}</span>}
+      {label && (
+        <span
+          className={`block text-sm ${
+            errorMessage
+              ? 'text-red-600 dark:text-red-500'
+              : 'text-gray-700 dark:text-gray-300'
+          }`}
+        >
+          {label}
+        </span>
+      )}
       <textarea
         rows={4}
-        className={`p-2 rounded w-full border border-gray-300 dark:border-zinc-700 bg-white dark:bg-zinc-300 dark:text-black focus:outline-none focus:ring-2 focus:ring-sky-500 ${className}`}
+        className={`textarea textarea-bordered w-full ${className}`}
         {...props}
       />
     </label>

@@ -7,15 +7,19 @@ type Props = {
   label?: string
   labelClassName?: string
   containerClassName?: string
+  wrapperClassName?: string
   children: ReactNode
   toggleOnClick?: boolean
+  errorMessage?: string
   id?: string
 }
 
 export const Dropdown = ({
   label = 'انتخاب',
   children,
+  errorMessage,
   id = 'dropdown_wrapper',
+  wrapperClassName = '',
   labelClassName = '',
   containerClassName = '',
   toggleOnClick,
@@ -47,16 +51,19 @@ export const Dropdown = ({
 
   const dropdownToggle = () => {
     setIsOpen((prev) => !prev)
+
     if (dropdownRef.current) {
       dropdownRef.current.style.display = isOpen ? '' : 'block'
     }
   }
 
   return (
-    <div id={id} className='relative w-fit'>
+    <div id={id} className={`relative h-[42px] w-fit ${wrapperClassName}`}>
       <button
         onClick={dropdownToggle}
-        className={`text-white w-full h-full rounded bg-sky-600 text-sm py-2 px-4 text-center inline-flex items-center gap-2 focus:ring-sky-400 focus:ring-2 focus:outline-none ${labelClassName}`}
+        className={`w-full h-full text-black rounded bg-gray-200 text-sm py-2 px-4 text-center inline-flex items-center justify-between gap-2 focus:ring-sky-400 focus:ring-2 focus:outline-none ${labelClassName} ${
+          errorMessage ? 'border border-red-600 dark:border-red-500' : ''
+        }`}
         type='button'
       >
         <span className='whitespace-nowrap'>{label}</span>

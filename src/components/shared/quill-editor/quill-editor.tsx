@@ -1,3 +1,4 @@
+'use client'
 import React, { useCallback, useEffect, useRef } from 'react'
 import { toast } from 'react-hot-toast'
 import ReactQuill from 'react-quill'

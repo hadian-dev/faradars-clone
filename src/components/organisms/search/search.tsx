@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef } from 'react'
 
 import { PATHS, SEARCH_PARAMS } from '@/constants'
 import { SearchIcon } from '@/shared'
@@ -23,7 +23,7 @@ export function Search() {
   useEffect(() => {
     if (!inputRef.current) return
 
-    const value = params.get(SEARCH_PARAMS.term) || ''
+    const value = params.get(SEARCH_PARAMS.TERM) || ''
     inputRef.current.value = value
   }, [params])
 
@@ -31,17 +31,17 @@ export function Search() {
     e.preventDefault()
 
     if (!inputRef.current) return
-    if (inputRef.current.value === params.get(SEARCH_PARAMS.term)) return
+    if (inputRef.current.value === params.get(SEARCH_PARAMS.TERM)) return
 
     inputRef.current.blur()
 
     if (inputRef.current.value) {
       const searchParams = new URLSearchParams()
-      searchParams.append(SEARCH_PARAMS.term, inputRef.current.value)
+      searchParams.append(SEARCH_PARAMS.TERM, inputRef.current.value)
       push(PATHS.courses.as(`?${searchParams.toString()}`))
     } else {
       const searchParams = new URLSearchParams(params.toString())
-      searchParams.delete(SEARCH_PARAMS.term)
+      searchParams.delete(SEARCH_PARAMS.TERM)
       push(PATHS.courses.as(searchParams.toString()))
     }
 
@@ -98,7 +98,7 @@ export function Search() {
         </span>
         <form onSubmit={onSubmit}>
           <input
-            className='input w-full pr-9 dark:bg-gray-900 border dark:border-gray-600'
+            className='input w-full pr-9 dark:bg-gray-900/80 border border-gray-200 dark:border-gray-600'
             placeholder='جستجوی آموزش ...'
             onFocus={onFocusInput}
             onBlur={onBlurInput}
@@ -120,9 +120,9 @@ export function Search() {
               <Link
                 href={{
                   pathname: PATHS.courses.url,
-                  query: { [SEARCH_PARAMS.term]: item.name },
+                  query: { [SEARCH_PARAMS.TERM]: item.name },
                 }}
-                className='py-1 px-3 cursor-pointer rounded border border-gray-400 dark:border-gray-600 bg-gray-200 dark:bg-gray-800 whitespace-nowrap'
+                className='py-1 px-3 text-sm cursor-pointer rounded border border-gray-300 dark:border-gray-600 bg-gray-200 dark:bg-gray-800 whitespace-nowrap'
               >
                 {item.name}
               </Link>
