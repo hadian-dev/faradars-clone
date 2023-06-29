@@ -1,3 +1,6 @@
 export const SEARCH_PARAMS = {
-  term: 'term',
+  TERM: 'term',
+  CATEGORIES: 'categories',
+  ORDER_BY: 'orderBy',
+  PRICE: 'price',
 }
