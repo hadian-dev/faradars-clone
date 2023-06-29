@@ -1,0 +1,7 @@
+export { default as TeachingSVG } from './teaching.svg'
+export { default as LearningSVG } from './learning.svg'
+export { default as FinancialSVG } from './financial.svg'
+export { default as TeacherSVG } from './teacher.svg'
+export { default as BenefitSVG } from './benefit.svg'
+export { default as CelebratingSVG } from './celebrating.svg'
+export { default as IDCardSVG } from './id-card.svg'
