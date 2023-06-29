@@ -19,13 +19,12 @@ const CourseView = () => {
           <video
             controls
             className='rounded-lg w-full mb-4'
-            poster={current.imageCover}
+            poster={current.image}
           >
             <source src={current.videoCover || ''} type='video/mp4' />
           </video>
           {current.descriptions.map((desc) => (
             <div key={desc.id}>
-              <h2 className='text-2xl mb-4'>{desc.label}</h2>
               <div
                 className='text-sm view ql-editor'
                 dangerouslySetInnerHTML={{ __html: desc.content }}

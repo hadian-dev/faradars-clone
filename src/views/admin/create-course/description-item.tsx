@@ -24,27 +24,23 @@ const DescriptionItem = ({ initial, onSave, onRemove }: Props) => {
     return JSON.stringify(desc) === JSON.stringify(initial)
   }
 
-  const onChangeLabel = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setDesc({ ...desc, label: e.target.value, saved: false })
-  }
-
   const onChangeContent = (content: string) => {
     setDesc({ ...desc, content, saved: false })
   }
 
   return (
     <div className='p-3 mt-3 border border-gray-300 dark:border-gray-600 rounded'>
-      <TextInput
+      {/* <TextInput
         value={desc.label}
         placeholder='نام برچسب'
         className='border-0 rounded-none border-b'
         style={desc.label ? {} : { borderColor: 'red' }}
         onChange={onChangeLabel}
-      />
+      /> */}
       <Editor value={desc.content} onChange={onChangeContent} />
-      {!desc.label && (
+      {/* {!desc.label && (
         <p className='text-sm text-red-500'>نام برچسب توضیحات خالی است</p>
-      )}
+      )} */}
       <div className='flex justify-between mt-2'>
         <div className='flex gap-2 items-center'>
           <Button

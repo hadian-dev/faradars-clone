@@ -84,7 +84,7 @@ const CreateForm = (props: FormikProps<CreateCourseInputType>) => {
         as={TextInput}
         className='mb-2'
         ltrDirection
-        name={FieldName.IMAGE_COVER}
+        name={FieldName.IMAGE}
         label='عکس'
       />
       <Field

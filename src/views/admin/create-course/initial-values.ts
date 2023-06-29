@@ -3,7 +3,7 @@ import { Prisma } from '@prisma/client'
 export enum FieldName {
   NAME = 'name',
   SLUG = 'slug',
-  IMAGE_COVER = 'imageCover',
+  IMAGE = 'image',
   PRICE = 'price',
   ORIGINAL_PRICE = 'originalPrice',
   VIDEO_COVER = 'videoCover',
@@ -17,15 +17,15 @@ export enum FieldName {
 
 export type TDescription = {
   index: number
-  label: string
   content: string
+  position: number
   saved: boolean
 }
 
 export const initialDescription = {
-  label: '',
   content: '',
   index: 1,
+  position: 1,
   saved: true,
 }
 
@@ -36,7 +36,7 @@ export type CreateCourseInputType = {
 export const initialValues: CreateCourseInputType = {
   [FieldName.NAME]: '',
   [FieldName.SLUG]: '',
-  [FieldName.IMAGE_COVER]: '',
+  [FieldName.IMAGE]: '',
   [FieldName.PRICE]: 0,
   [FieldName.ORIGINAL_PRICE]: 0,
   [FieldName.VIDEO_COVER]: '',

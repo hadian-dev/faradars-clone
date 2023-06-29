@@ -29,20 +29,20 @@ const CreateCourseView = () => {
         (desc) => !!desc.content.replace(reg, '')
       )
 
-      if (!isValidDesc || descriptionList.some((desc) => !desc.label)) {
+      if (!isValidDesc) {
         toast.error('مقدار توضیحات نباید خالی باشد')
         return
       }
 
-      const descriptions = descriptionList.map(({ label, content }) => ({
-        label,
+      const descriptions = descriptionList.map(({ position, content }) => ({
+        position,
         content,
       }))
 
       createCourse.mutate({
         data: {
           ...values,
-          descriptions: { createMany: { data: descriptions } },
+          htmlDescriptions: { createMany: { data: descriptions } },
         },
       })
 

@@ -11,7 +11,8 @@ type Props = {
 
 const DescriptionsList = ({ list, setList }: Props) => {
   const addDescription = () => {
-    setList([...list, { ...initialDescription, index: list.length + 1 }])
+    const index = list.length + 1
+    setList([...list, { ...initialDescription, index, position: index }])
   }
 
   const onSaveDesc = (desc: TDescription) => {

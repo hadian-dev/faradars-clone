@@ -1,6 +1,5 @@
 import React from 'react'
-import Features from './features'
-import { Search } from '@/components/organisms'
+import { Features, Search } from '@/components/organisms'
 
 const Banner = () => {
   return (

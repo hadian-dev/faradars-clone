@@ -1,6 +1,7 @@
 import { TfiLayoutGrid3Alt } from 'react-icons/tfi'
 import { FaThList } from 'react-icons/fa'
-import { usePathname, useRouter, useSearchParams } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
+import { PATHS, SEARCH_PARAMS } from '@/constants'
 
 const sortList = [
   { code: 'popular', name: 'پرمخاطب ترین' },
@@ -11,19 +12,14 @@ const sortList = [
 const SortBar = () => {
   const params = useSearchParams()
   const router = useRouter()
-  const pathname = usePathname()
-  const selected = params.get('orderBy')
+  const selected = params.get(SEARCH_PARAMS.ORDER_BY)
 
   const onSelect = (item: (typeof sortList)[0]) => {
-    const sParams = new URLSearchParams(params.toString())
-    sParams.set('orderBy', item.code)
+    if (selected && selected === item.code) return
 
-    if (selected && item.code === sortList[0].code) {
-      sParams.delete('orderBy')
-    }
-
-    const path = `${pathname}?${sParams.toString()}`
-    router.push(path)
+    const newParams = new URLSearchParams(params as any)
+    newParams.set(SEARCH_PARAMS.ORDER_BY, item.code)
+    router.push(PATHS.courses.as(newParams.toString()))
   }
 
   return (
@@ -48,10 +44,10 @@ const SortBar = () => {
         </ul>
       </div>
       <div className='flex'>
-        <button className='p-1'>
+        <button className='p-1' aria-label='grid'>
           <TfiLayoutGrid3Alt className='text-sky-500 dark:text-sky-400' />
         </button>
-        <button className='p-1'>
+        <button className='p-1' aria-label='list'>
           <FaThList />
         </button>
       </div>
