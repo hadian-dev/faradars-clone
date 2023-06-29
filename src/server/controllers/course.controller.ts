@@ -23,4 +23,16 @@ export const courseController = {
   ) => {
     return prisma.courseDescription.createMany(input)
   },
+
+  createCategoryOnCourse: async (
+    input: Prisma.CategoriesOnCourseCreateArgs
+  ) => {
+    return prisma.categoriesOnCourse.create(input)
+  },
+
+  createInstructorOnCourse: async (
+    input: Prisma.InstructorsOnCourseCreateArgs
+  ) => {
+    return prisma.instructorsOnCourse.create(input)
+  },
 }
