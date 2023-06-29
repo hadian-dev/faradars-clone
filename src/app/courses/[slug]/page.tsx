@@ -13,7 +13,7 @@ const CoursePage = async ({ params }: PageProps) => {
   const [id] = params.slug.split('-')
   const data = (await courseController.getCourse({
     where: { id: +id },
-    include: { descriptions: {} },
+    include: { htmlDescriptions: {} },
   })) as Course & {
     descriptions: CourseDescription[]
   }

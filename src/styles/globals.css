@@ -7,52 +7,57 @@
   src: url('/fonts/shabnam.woff2');
 }
 
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-rgb: 255, 255, 255;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-rgb: 40, 45, 55;
-  }
-
-  .quill .ql-toolbar {
-    border-bottom: 1px solid #445 !important;
-  }
-
-  .quill .ql-container {
-    color: #445;
-    font-family: 'Shabnam';
-  }
-
-  .quill .ql-tooltip input {
-    background-color: #ebebeb;
-  }
-}
-
-body {
-  direction: rtl;
-  color: rgb(var(--foreground-rgb));
-  background: rgb(var(--background-rgb));
-}
-
-.h-unset {
-  height: unset;
-}
-
-.quill {
-  direction: ltr;
-}
-
-svg {
-  margin: auto;
-}
-
 @layer base {
   body {
+    direction: rtl;
     @apply font-shabnam;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    .quill .ql-toolbar {
+      border-bottom: 1px solid #445 !important;
+    }
+
+    .quill .ql-container {
+      color: #445;
+      font-family: 'Shabnam';
+    }
+
+    .quill .ql-tooltip input {
+      background-color: #ebebeb;
+    }
+  }
+
+  svg {
+    @apply m-0 text-gray-500 dark:text-base;
+  }
+
+  *:hover > svg {
+    color: currentColor;
+  }
+
+  #nprogress {
+    position: fixed;
+    z-index: 999;
+    width: 100%;
+    left: 0;
+    top: 0;
+  }
+
+  #nprogress .bar .peg {
+    height: 4px;
+    box-shadow: 0 1px 4px #555;
+    background-color: #fff;
+  }
+
+  #nprogress .spinner {
+    display: block;
+    position: fixed;
+    top: 5px;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #fff;
   }
 
   input[type='number']::-webkit-inner-spin-button,
@@ -69,7 +74,31 @@ svg {
     direction: ltr;
   }
 
+  .h-unset {
+    height: unset;
+  }
+
+  .pos-unset {
+    position: unset;
+  }
+
+  .quill {
+    direction: ltr;
+  }
+
   .item {
     @apply flex flex-col w-auto p-2 items-center rounded-md border border-transparent hover:border-gray-300;
+  }
+
+  .button {
+    @apply flex gap-1 justify-center items-center border rounded w-auto text-center whitespace-nowrap p-1 focus:outline-none disabled:bg-gray-400 disabled:dark:bg-gray-700 disabled:text-gray-800 disabled:dark:text-gray-400 disabled:border-gray-600 disabled:dark:border-gray-500;
+  }
+
+  .primary-btn {
+    @apply bg-sky-500 dark:bg-sky-600 border-sky-600 dark:border-sky-500 hover:bg-sky-600 hover:dark:bg-sky-700 focus:ring-2 focus:ring-sky-500/50 focus:ring-offset-1 focus:dark:ring-offset-black transition-colors;
+  }
+
+  .success-btn {
+    @apply bg-green-500 dark:bg-green-600 border-green-600 dark:border-green-500 hover:bg-green-400 hover:dark:bg-green-700 focus:ring-2 focus:ring-green-500/50 focus:ring-offset-1 focus:dark:ring-offset-black transition-colors;
   }
 }

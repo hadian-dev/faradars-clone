@@ -7,27 +7,28 @@ import { IntlProvider } from '@/providers/intl'
 import { TrpcProvider } from '@/providers/trpc/trpc-provider'
 import { StoreProvider } from '@/providers/store'
 import { MainLayout } from '@/layouts'
-import { Toaster } from 'react-hot-toast'
+
+import { AuthProvider } from '@/providers/auth'
+import NProgressBar from '@/providers/progress-bar'
 
 export const metadata = {
   title: 'فرادرس',
   description: 'دانشگاه آنلاین فرادرس',
 }
 
-export default async function RootLayout({ children }: PropsWithChildren) {
+export default async function RootLayout(props: PropsWithChildren) {
   return (
     <html lang='fa'>
       <body suppressHydrationWarning>
         <TrpcProvider>
-          <StoreProvider>
-            <IntlProvider>
-              <MainLayout>{children}</MainLayout>
-              <Toaster
-                position='top-right'
-                toastOptions={{ style: { fontSize: '12px' } }}
-              />
-            </IntlProvider>
-          </StoreProvider>
+          <AuthProvider>
+            <StoreProvider>
+              <IntlProvider>
+                <MainLayout>{props.children}</MainLayout>
+                <NProgressBar />
+              </IntlProvider>
+            </StoreProvider>
+          </AuthProvider>
         </TrpcProvider>
       </body>
     </html>

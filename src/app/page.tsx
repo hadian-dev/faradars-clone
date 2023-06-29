@@ -12,16 +12,18 @@ export default async function Home() {
       image: true,
       slug: true,
     },
+    where: { slug: { not: { equals: '__root__' } } },
   })
 
   const courseList = await courseController.getCourseList({
+    where: { status: 'PUBLISHED' },
     take: 20,
     select: {
       id: true,
       slug: true,
       name: true,
       price: true,
-      imageCover: true,
+      image: true,
     },
   })
 

@@ -4,13 +4,14 @@ import CoursesView from '@/views/courses'
 
 const CoursesPage = async () => {
   const courseList = await courseController.getCourseList({
+    where: { status: 'PUBLISHED' },
     take: 20,
     select: {
       id: true,
       slug: true,
       name: true,
       price: true,
-      imageCover: true,
+      image: true,
     },
   })
 
