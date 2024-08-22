@@ -47,6 +47,7 @@ enum CourseType {
 enum CourseState {
   STARTED
   DRAFT
+  ACCEPTED
   PROGRESS
   PUBLISHED
   FINISHED

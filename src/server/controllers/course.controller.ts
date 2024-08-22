@@ -1,17 +1,22 @@
 import { Course, Prisma } from '@prisma/client'
 import { prisma } from '../utils/connect-db'
+import { TChangeCourseStateInput } from '../schemas'
 
 export const courseController = {
   getCourseList: async (input: Prisma.CourseFindManyArgs) => {
     const data = await prisma.course.findMany(input)
 
-    return JSON.parse(JSON.stringify(data)) as Course[]
+    return JSON.parse(JSON.stringify(data)) as typeof data
   },
 
   getCourse: async (input: Prisma.CourseFindUniqueArgs) => {
     const data = await prisma.course.findUnique(input)
 
     return data ? (JSON.parse(JSON.stringify(data)) as Course) : null
+  },
+
+  changeCourseState: async ({ id, status }: TChangeCourseStateInput) => {
+    return prisma.course.update({ where: { id }, data: { status } })
   },
 
   createCourse: async (input: Prisma.CourseCreateArgs) => {

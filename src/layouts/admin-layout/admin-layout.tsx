@@ -1,9 +1,23 @@
 import { FaradarsLogoIcon } from '@/components/shared'
 import { PATHS } from '@/constants'
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import React, { PropsWithChildren } from 'react'
 
+const links = [
+  { name: 'داشبرد', url: PATHS.adminPanel.url },
+  { name: 'آموزش ها', url: PATHS.adminCourseList.url },
+  { name: 'دسته بندی ها', url: PATHS.adminCategoryList.url },
+  { name: 'کابران', url: PATHS.adminUserList.url },
+]
+
 const AdminLayout = ({ children }: PropsWithChildren) => {
+  const pathname = usePathname()
+
+  const isSelected = (uri: string) => {
+    return
+  }
+
   return (
     <div>
       <header className='flex items-center px-6 w-full h-[70px] fixed top-0 z-40 border-b border-gray-200 dark:border-gray-700 shadow-lg shadow-gray-300 dark:shadow-gray-900'>
@@ -31,18 +45,18 @@ const AdminLayout = ({ children }: PropsWithChildren) => {
           <div className='drawer-side'>
             <label htmlFor='my-drawer' className='drawer-overlay' />
             <ul className='menu p-4 w-full bg-base-100 text-base-content'>
-              <li>
-                <Link href={PATHS.adminPanel.url}>داشبرد</Link>
-              </li>
-              <li>
-                <Link href={PATHS.adminUserList.url}>کاربران</Link>
-              </li>
-              <li>
-                <Link href={PATHS.adminCourseList.url}>آموزش ها</Link>
-              </li>
-              <li>
-                <Link href={PATHS.adminCategoryList.url}>دسته بندی ها</Link>
-              </li>
+              {links.map((link) => (
+                <li
+                  key={link.url}
+                  className={
+                    link.url === pathname
+                      ? 'bg-sky-300/50 text-sky-600 overflow-hidden rounded-lg dark:bg-sky-900/50 dark:text-sky-300 border-b-4 border-sky-500 dark:border-sky-600'
+                      : ''
+                  }
+                >
+                  <Link href={link.url}>{link.name}</Link>
+                </li>
+              ))}
             </ul>
           </div>
         </aside>

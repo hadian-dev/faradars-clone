@@ -1,5 +1,3 @@
-// @ts-nocheck
-
 import { z } from 'zod';
 import type { Prisma } from '@prisma/client';
 
@@ -66,7 +64,7 @@ export const CourseTypeSchema = z.enum(['ONLINE','WEBINAR']);
 
 export type CourseTypeType = `${z.infer<typeof CourseTypeSchema>}`
 
-export const CourseStateSchema = z.enum(['STARTED','DRAFT','PROGRESS','PUBLISHED','FINISHED']);
+export const CourseStateSchema = z.enum(['STARTED','DRAFT','ACCEPTED','PROGRESS','PUBLISHED','FINISHED']);
 
 export type CourseStateType = `${z.infer<typeof CourseStateSchema>}`
 
